@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #272a36;
+            color: rgba(255, 255 ,255 ,0.9);
+        }
+
+        .container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 70%;
+            height: 100%;
+            padding: 20px;
+            /* border: 1px solid #27232d; */
+            border-radius: 5px;
+            background-color:#08131c;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease-out;
+            margin:auto;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            
+           
+
+        }
+
+        .container:hover{
+            box-shadow: 0 0 150px rgba(0, 0, 0, 0.9);
+        }
+
+        
+        .title {
+            font-size: 28px;
+            margin-top: 20px;
+            font-weight: bold;
+
+        }
+
+        form {
+            margin: 20px auto;
+        }
+
+        label {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+
+
+
+        }
+
+        input {
+            padding: 10px;
+            font-size: 18px;
+            width: 100%;
+            border-radius: 10px;
+            outline: none;
+            border: none;
+            background-color: #272a36;
+            margin-bottom: 20px;
+            font-weight: 400;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: rgb(0, 14, 86);
+            width: 30%;
+            height: 7vh;
+            border-radius: 10px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        button:hover {
+            background-color: #08131c;
+            border: 1px solid #ddd;
+        }
+
+        #download_message {
+            font-size: 18px;
+            color: green;
+        }
+
+        /* Loader styles */
+        #loader body {
+            padding: 50px;
+        }
+
+        #loader {
+            display: none;
+            border: 5px solid #333;
+            border-top-color: #ddd;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            margin: 2px auto;
+            animation: rotate 1s infinite;
+
+
+        }
+
+        @keyframes rotate {
+            100% {
+                rotate: 360deg;
+            }
+
+        }
+        
+    </style>
+
+
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">YouTube Video Downloader</h1>
+        <form id="download_form" method="POST">
+            <label for="link">Paste Link Here:</label>
+            <input type="text" id="video_url" name="video_url" required
+                placeholder="https://youtube.com/short&video/=dsafklka">
+            <button type="submit">DOWNLOAD</button>
+        </form>
+        
+         <!-- Loader -->
+        <div id="loader"></div>
+
+
+        <!-- Download message -->
+        <p id="download_message"></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const downloadForm = document.querySelector('#download_form');
+            const downloadMessage = document.querySelector('#download_message');
+            const loader = document.querySelector('#loader');
+
+            downloadForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                // Show loader while downloading
+                loader.style.display = 'block';
+
+                const videoUrl = document.querySelector('#video_url').value;
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `video_url=${encodeURIComponent(videoUrl)}`,
+                });
+
+                const responseData = await response.json();
+
+                // Hide loader after download
+                loader.style.display = 'none';
+
+                // Display download message
+                downloadMessage.textContent = responseData.message;
+            });
+        });
+    </script>
+</body>
+
+</html>
